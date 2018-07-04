@@ -1,0 +1,36 @@
+/dist
+/node_modules
+
+.DS_Store
+**/*/.DS_store
+
+#Ignore all Asp.Net serverside files
+.tfignore
+App_Data/
+App_Start/
+bin/
+Content/
+Controllers/
+Filters/
+./fonts/
+Global.asax
+Global.asax.cs
+Helpers/
+IVAs.co.uk.csproj
+IVAs.co.uk.csproj.user
+IVAs.co.uk.csproj.vspscc
+Mappers/
+Models/
+obj/
+oops.aspx
+packages.config
+Properties/
+./Scripts/
+Services/
+Views/
+Web.config
+Web.DebtSos.Production.config
+Web.DebtSos.UAT.config
+compilerconfig.json
+compilerconfig.json.defaults
+#-- serverside

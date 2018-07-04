@@ -1,0 +1,88 @@
+@mixin transition( $a: opacity, $b: 1s, $c: ease-in-out, $d: 0s ) {
+	-webkit-transition: $a $b $c;
+  -webkit-transition-delay: $d;
+	-moz-transition: $a $b $c;
+  -moz-transition-delay: $d;
+	-ms-transition: $a $b $c;
+  -ms-transition-delay: $d;
+	-o-transition: $a $b $c;
+  -o-transition-delay: $d;
+	transition: $a $b $c;
+  transition-delay: $d;
+}
+
+@mixin translate( $a: 0px, $b: 0px ) {
+	transform: translate($a $b);
+	-ms-transform: translate($a $b);
+	-webkit-transform: translate($a $b);
+	-o-transform: translate($a $b);
+}
+
+@mixin scale( $h: 1, $w: 1 ) {
+  transform: scale($h, $w);
+  -ms-transform: scale($h, $w);
+  -webkit-transform: scale($h, $w);
+  -o-transform: scale($h, $w);
+}
+
+@mixin rotate( $degrees ) {
+	-webkit-transform: rotate($degrees);
+	-moz-transform: rotate($degrees);
+	-ms-transform: rotate($degrees);
+	-o-transform: rotate($degrees);
+	transform: rotate($degrees);
+}
+
+@mixin opacity( $opacity: 0.5 ) {
+  -moz-opacity: $opacity;
+  -khtml-opacity: $opacity;
+  -webkit-opacity: $opacity;
+  opacity: $opacity;
+  $opperc: $opacity * 100;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(opacity=$opperc)";
+  filter: "alpha(opacity=$opperc)";
+}
+
+@mixin border-radius( $radius: 5px ) {
+  -webkit-border-radius: $radius;
+  border-radius: $radius;
+  background-clip: padding-box;  /* stops bg color from leaking outside the border: */
+}
+
+@mixin border-top-radius( $radius: 5px ) {
+  -webkit-border-top-right-radius: $radius;
+  border-top-right-radius: $radius;
+  -webkit-border-top-left-radius: $radius;
+  border-top-left-radius: $radius;
+  background-clip: padding-box;
+}
+
+@mixin border-right-radius( $radius: 5px ) {
+  -webkit-border-bottom-right-radius: $radius;
+  border-bottom-right-radius: $radius;
+	-webkit-border-top-right-radius: $radius;
+  border-top-right-radius: $radius;
+  background-clip: padding-box;
+}
+
+@mixin border-bottom-radius( $radius: 5px ) {
+  -webkit-border-bottom-right-radius: $radius;
+  border-bottom-right-radius: $radius;
+  -webkit-border-bottom-left-radius: $radius;
+  border-bottom-left-radius: $radius;
+  background-clip: padding-box;
+}
+
+@mixin border-left-radius( $radius: 5px ) {
+  -webkit-border-bottom-left-radius: $radius;
+  border-bottom-left-radius: $radius;
+	-webkit-border-top-left-radius: $radius;
+	border-top-left-radius: $radius;
+	background-clip: padding-box;
+}
+
+@mixin image-2x( $image, $width: auto, $height: auto ) {
+  @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6/2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+    background-image: url($image);
+  }
+}
