@@ -38,16 +38,16 @@ var jsDistRoute = path.join(distRoute, 'js');
 
 // CLI options
 var enabled = {
-    // Enable static asset revisioning when `--production`
-    rev: argv.production,
-    // Disable source maps when `--production`
-    maps: !argv.production,
-    // Fail styles task on error when `--production`
-    failStyleTask: argv.production,
-    // Fail due to JSHint warnings only when `--production`
-    failJSHint: argv.production,
-    // Strip debug statements from javascript when `--production`
-    stripJSDebug: argv.production
+  // Enable static asset revisioning when `--production`
+  rev: argv.production,
+  // Disable source maps when `--production`
+  maps: !argv.production,
+  // Fail styles task on error when `--production`
+  failStyleTask: argv.production,
+  // Fail due to JSHint warnings only when `--production`
+  failJSHint: argv.production,
+  // Strip debug statements from javascript when `--production`
+  stripJSDebug: argv.production
 };
 
 var isWatching = true;
@@ -56,7 +56,7 @@ var isWatching = true;
  * Removes dist folder
  */
 gulp.task('clean', function () {
-    return del(distRoute);
+  return del(distRoute);
 });
 
 
@@ -64,36 +64,36 @@ gulp.task('clean', function () {
  * Places fonts
  */
 gulp.task('fonts', function () {
-    return gulp.src(path.join(assetRoute, 'fonts/**/*'))
-        .pipe(flatten())
-        .pipe(gulp.dest(fontDistRoute))
-        .pipe(notify({
-            message: '<%= file.relative %> moved'
-        }));
+  return gulp.src(path.join(assetRoute, 'fonts/**/*'))
+  .pipe(flatten())
+  .pipe(gulp.dest(fontDistRoute))
+  .pipe(notify({
+      message: '<%= file.relative %> moved'
+  }));
 });
 
 /**
  * Compresses and moves images
  */
 gulp.task('images', function () {
-    return gulp.src( [path.join(assetRoute, 'img/**/*.*')] )
-    .pipe(image({
-          pngquant: true,
-          optipng: false,
-          zopflipng: true,
-          jpegRecompress: false,
-          mozjpeg: true,
-          guetzli: false,
-          gifsicle: true,
-          svgo: true,
-          concurrent: 10,
-          quiet: true // defaults to false
-        }))
-        .pipe(gulp.dest(imageDistRoute))
-        .pipe(browserSync.stream())
-        .pipe(notify({
-            message:  '<%= file.relative %> optimised & moved'
-        }));
+  return gulp.src( [path.join(assetRoute, 'img/**/*.*')] )
+  .pipe(image({
+    pngquant: true,
+    optipng: false,
+    zopflipng: true,
+    jpegRecompress: false,
+    mozjpeg: true,
+    guetzli: false,
+    gifsicle: true,
+    svgo: true,
+    concurrent: 10,
+    quiet: true // defaults to false
+  }))
+  .pipe(gulp.dest(imageDistRoute))
+  .pipe(browserSync.stream())
+  .pipe(notify({
+      message:  '<%= file.relative %> optimised & moved'
+  }));
 });
 /**
  * Minifies and combines JS
@@ -101,85 +101,85 @@ gulp.task('images', function () {
  * Here you can add / remove bootstrap plugins or other scripts
  */
 gulp.task('scripts', function () {
-    var merged = [
-        'node_modules/jquery/dist/jquery.js',
-        'node_modules/modernizr/modernizr.js',
-        'node_modules/tether/dist/js/tether.js',
-        path.join(assetRoute, 'scripts/**/!(main)*.js'),
-        path.join(assetRoute, 'scripts/main.js')
-    ];
+  var merged = [
+    'node_modules/jquery/dist/jquery.js',
+    'node_modules/modernizr/modernizr.js',
+    'node_modules/tether/dist/js/tether.js',
+    path.join(assetRoute, 'scripts/**/!(main)*.js'),
+    path.join(assetRoute, 'scripts/main.js')
+  ];
 
-    return gulp
-        .src(merged)
-        .pipe(order(merged, {
-          base: './'
-        }))
-        .pipe(gulpif(enabled.maps, sourcemaps.init()))
-        .pipe(concat('main.js'))
-        .pipe(uglify({
-            compress: {
-                'drop_debugger': enabled.stripJSDebug
-            }
-        }))
-        .pipe(gulpif(enabled.maps, sourcemaps.write('.')))
-        .pipe(gulp.dest(jsDistRoute))
-        .pipe(notify({
-            message: '<%= file.relative %> built'
-        }));
+  return gulp
+  .src(merged)
+  .pipe(order(merged, {
+    base: './'
+  }))
+  .pipe(gulpif(enabled.maps, sourcemaps.init()))
+  .pipe(concat('main.js'))
+  .pipe(uglify({
+      compress: {
+          'drop_debugger': enabled.stripJSDebug
+      }
+  }))
+  .pipe(gulpif(enabled.maps, sourcemaps.write('.')))
+  .pipe(gulp.dest(jsDistRoute))
+  .pipe(notify({
+    message: '<%= file.relative %> built'
+  }));
 });
 
 /**
  * Checks for JS errors
  */
 gulp.task('jshint', function () {
-    return gulp.src([
-            'gulpfile.js'
-        ].concat('lint.js'))
-        .pipe(jshint())
-        .pipe(jshint.reporter('jshint-stylish'))
-        .pipe(notify({
-            message: 'JShint ran'
-        }))
-        .pipe(gulpif(enabled.failJSHint, jshint.reporter('fail')));
+  return gulp.src([
+    'gulpfile.js'
+  ].concat('lint.js'))
+  .pipe(jshint())
+  .pipe(jshint.reporter('jshint-stylish'))
+  .pipe(notify({
+    message: 'JShint ran'
+  }))
+  .pipe(gulpif(enabled.failJSHint, jshint.reporter('fail')));
 });
 
 /**
  * Builds Sass
  */
 gulp.task('sass', function () {
-    return gulp
-        .src('assets/sass/main.scss')
-        .pipe(gulpif(!enabled.failStyleTask, plumber()))
-        .pipe(gulpif(enabled.maps, sourcemaps.init()))
-        .pipe(sass({
-            outputStyle: 'nested', // libsass doesn't support expanded yet
-            precision: 10,
-            includePaths: ['.'],
-            errLogToConsole: !enabled.failStyleTask
-        }, true))
-        .pipe(autoprefixer({
-            browsers: [
-                'last 2 versions',
-                'Safari >= 5',
-                'Explorer >= 8',
-                'Opera >= 12',
-                'iOS >= 5',
-                'Android >= 4.1',
-                'ChromeAndroid >= 18',
-                'ExplorerMobile >= 8'
-            ]
-        }))
-        .pipe(rename(function(path) {
-            path.basename = 'main';
-            path.dirname = '';
-        }))
-        .pipe(sourcemaps.write('.', {
-            sourceRoot: cssDistRoute
-        }))
-        .pipe(notify({
-            message: '<%= file.relative %> built'
-        }))
-        .pipe(gulp.dest(cssDistRoute));
+  return gulp
+  .src('assets/sass/main.scss')
+  .pipe(gulpif(!enabled.failStyleTask, plumber()))
+  .pipe(gulpif(enabled.maps, sourcemaps.init()))
+  .pipe(sass({
+    outputStyle: 'nested', // libsass doesn't support expanded yet
+    precision: 10,
+    includePaths: ['.'],
+    errLogToConsole: !enabled.failStyleTask
+  }, true))
+  .pipe(autoprefixer({
+    browsers: [
+      'last 2 versions',
+      'Safari >= 5',
+      'Explorer >= 8',
+      'Opera >= 12',
+      'iOS >= 5',
+      'Android >= 4.1',
+      'ChromeAndroid >= 18',
+      'ExplorerMobile >= 8'
+    ]
+  }))
+  .pipe(rename(function(path) {
+    path.basename = 'main';
+    path.dirname = '';
+  }))
+  .pipe(sourcemaps.write('.', {
+    sourceRoot: cssDistRoute
+  }))
+  .pipe(notify({
+    message: '<%= file.relative %> built'
+  }))
+  .pipe(gulp.dest(cssDistRoute));
 });
 
 /**
@@ -206,11 +206,17 @@ gulp.task('css', function() {
 });
 
 gulp.task('styles', function() {
-  return runSequence('sass', 'css');
+  return runSequence(
+    'sass',
+    'css'
+  );
 });
 
 gulp.task('js', function() {
-  return runSequence('scripts', 'jshint');
+  return runSequence(
+    'scripts',
+    'jshint'
+  );
 });
 
 /**
@@ -233,37 +239,28 @@ gulp.task('manifest', function () {
  *
  * Runs tasks in order
  */
-gulp.task('default', function (done) {
-  runSequence(
+gulp.task('default', function () {
+  return runSequence(
     'clean',
     [
       'fonts',
       'styles',
-      'js'
+      'js',
+      'images',
     ],
-    'images',
-    'manifest',
-    'complete'
+    'manifest'
   );
-});
-
-gulp.task('complete', function() {
-  return gulp
-  .src('')
-  .pipe(notify({
-      message: 'Build complete!'
-  }));
 });
 
 /**
  * Watch wrapper, watches for changes
  */
 gulp.task('watch', function () {
-    isWatching = true;
-    gulp.watch([assetRoute + '/scripts/**/*.js'], ['js']);
-    gulp.watch([assetRoute + '/fonts/**/*'], ['fonts']);
-    gulp.watch([assetRoute + '/img/**/*'], ['images']);
-    gulp.watch([assetRoute + '/sass/**/**/**/*.scss'], ['styles']);
+  isWatching = true;
+  gulp.watch([assetRoute + '/scripts/**/*.js'], ['js']);
+  gulp.watch([assetRoute + '/fonts/**/*'], ['fonts']);
+  gulp.watch([assetRoute + '/img/**/*'], ['images']);
+  gulp.watch([assetRoute + '/sass/**/**/**/*.scss'], ['styles']);
 });
 
 /**
@@ -272,20 +269,20 @@ gulp.task('watch', function () {
  * @returns {*}
  */
 var createManifest = function () {
-    return lazypipe()
-        .pipe(function () {
-            return gulpif(enabled.rev, rev());
-        }).pipe(function () {
-            return gulp.dest(distRoute);
-        })
-        .pipe(function () {
-            return rev.manifest({
-                path: path.join(distRoute, 'assets.json'),
-                base: distRoute,
-                merge: true
-            });
-        })
-        .pipe(function () {
-            return gulp.dest(distRoute);
-        })();
+  return lazypipe()
+  .pipe(function () {
+    return gulpif(enabled.rev, rev());
+  }).pipe(function () {
+    return gulp.dest(distRoute);
+  })
+  .pipe(function () {
+    return rev.manifest({
+      path: path.join(distRoute, 'assets.json'),
+      base: distRoute,
+      merge: true
+    });
+  })
+  .pipe(function () {
+    return gulp.dest(distRoute);
+  })();
 };
