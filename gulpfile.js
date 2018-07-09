@@ -242,12 +242,10 @@ gulp.task('manifest', function () {
 gulp.task('default', function () {
   return runSequence(
     'clean',
-    [
-      'fonts',
-      'styles',
-      'js',
-      'images',
-    ],
+    'fonts',
+    'styles',
+    'js',
+    'images',
     'manifest'
   );
 });
